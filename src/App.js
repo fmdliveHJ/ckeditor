@@ -1,12 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import Editor from '@ckeditor/ckeditor5-build-classic';
-// import Editor from 'ckeditor5-custom/build/ckeditor';
+import BuildedEditor from 'ckeditor5-custom-build/build/ckeditor';
 
-// import Editor from '@ckeditor5-custom-build/build/ckeditor';
-import { Container, Header, Button } from 'semantic-ui-react';
+import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './ckeditor.css';
 function App() {
+  const [editorData, setEditorData] = useState('');
+
+  function handleEditorChange(event, editor) {
+    const data = editor.getData();
+    setEditorData(data);
+  }
+
+  const editorConfig = {
+    contentCss: [
+      'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css',
+    ],
+  };
+
+  const handleEditorReady = (editor) => {
+    console.log('Editor is ready to use!', editor);
+  };
+
+  const handleSubmit = () => {};
+
   return (
     <div
       style={{
@@ -17,25 +35,36 @@ function App() {
         alignItems: 'center',
       }}
     >
-      <Container>
+      <Container style={{ width: '100%', maxWidth: '100%' }}>
+        {/* <Row className='justify-content-md-center'>
+          <Col md='auto'>
+            <Card style={{ width: '100%', marginTop: '2rem' }}>
+              <Card.Header>
+                <h2>CKEditor 5 with React-Bootstrap</h2>
+              </Card.Header>
+              <Card.Body> */}
         <CKEditor
-          editor={Editor}
-          data='<p>Hello from CKEditor 5!</p>'
-          onReady={(editor) => {
-            // You can store the "editor" and use when it is needed.
-            console.log('Editor is ready to use!', editor);
-          }}
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            console.log({ event, editor, data });
-          }}
+          editor={BuildedEditor}
+          data={editorData}
+          onChange={handleEditorChange}
+          onReady={handleEditorReady}
           onBlur={(event, editor) => {
             console.log('Blur.', editor);
           }}
           onFocus={(event, editor) => {
             console.log('Focus.', editor);
           }}
+          config={editorConfig}
         />
+        {/* </Card.Body>
+              <Card.Footer>
+                <Button variant='primary' onClick={handleSubmit}>
+                  Submit
+                </Button>
+              </Card.Footer>
+            </Card>
+          </Col>
+        </Row> */}
       </Container>
     </div>
   );
